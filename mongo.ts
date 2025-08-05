@@ -1,4 +1,6 @@
 import { MongoClient, Db } from "mongodb";
+import dotenv from "dotenv";
+dotenv.config();
 
 let cachedDb: Db;
 
