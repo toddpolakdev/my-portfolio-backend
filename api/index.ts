@@ -2,7 +2,8 @@ import { ApolloServer } from "apollo-server-micro";
 import { typeDefs } from "./graphql/schema";
 import { resolvers } from "./graphql/resolvers";
 import { connectToDatabase } from "../mongo";
-import { VercelRequest, VercelResponse } from "@vercel/node";
+// import { VercelRequest, VercelResponse } from "@vercel/node";
+import { IncomingMessage, ServerResponse } from "http";
 
 const server = new ApolloServer({
   typeDefs,
@@ -22,7 +23,11 @@ export const config = {
   },
 };
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+// export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(
+  req: IncomingMessage,
+  res: ServerResponse
+) {
   await startServer;
 
   // CORS
@@ -32,7 +37,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
   if (req.method === "OPTIONS") {
-    res.status(200).end();
+    // res.status(200).end();
+    res.statusCode = 200;
+    res.end();
     return;
   }
 
