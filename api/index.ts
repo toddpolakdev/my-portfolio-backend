@@ -30,9 +30,14 @@ export default async function handler(
 ) {
   await startServer;
 
-  // CORS
+  const allowedOrigin = process.env.ALLOWED_ORIGIN;
+
+  if (!allowedOrigin) {
+    throw new Error("ALLOWED_ORIGIN environment variable is not set.");
+  }
+
   res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
