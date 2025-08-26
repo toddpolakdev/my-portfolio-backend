@@ -12,4 +12,28 @@ export const resolvers = {
       return db.collection("section").findOne({ id: args.id });
     },
   },
+  Mutation: {
+    submitContact: async (
+      _: any,
+      {
+        name,
+        email,
+        subject,
+        message,
+      }: { name: string; email: string; subject: string; message: string },
+      { db }: { db: Db }
+    ) => {
+      const newEntry = {
+        name,
+        email,
+        subject,
+        message,
+        createdAt: new Date().toISOString(),
+      };
+
+      const result = await db.collection("contacts").insertOne(newEntry);
+
+      return { _id: result.insertedId, ...newEntry };
+    },
+  },
 };

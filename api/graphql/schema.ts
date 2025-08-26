@@ -13,6 +13,13 @@ export const typeDefs = gql`
     description: [String!]!
   }
 
+  type EducationEntry {
+    degree: String!
+    institution: String!
+    duration: String!
+    description: [String!]!
+  }
+
   type Section {
     _id: ID!
     id: String!
@@ -23,11 +30,39 @@ export const typeDefs = gql`
     content: [String]
     skills: [SkillCategory]
     experience: [JobEntry]
+    education: [EducationEntry]
     background: String
+  }
+
+  type ContactEntry {
+    _id: ID!
+    name: String!
+    email: String!
+    subject: String!
+    message: String!
+    createdAt: String!
+  }
+
+  extend type Mutation {
+    submitContact(
+      name: String!
+      email: String!
+      subject: String!
+      message: String!
+    ): ContactEntry!
   }
 
   type Query {
     sections(ids: [String!]): [Section!]!
     section(id: String!): Section
+  }
+
+  type Mutation {
+    submitContact(
+      name: String!
+      email: String!
+      subject: String!
+      message: String!
+    ): ContactEntry!
   }
 `;
