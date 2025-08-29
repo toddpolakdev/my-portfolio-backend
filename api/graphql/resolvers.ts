@@ -31,6 +31,13 @@ export const resolvers = {
         createdAt: new Date().toISOString(),
       };
 
+      if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+        throw new Error("Invalid email");
+      }
+      if (message.length > 1000) {
+        throw new Error("Message too long");
+      }
+
       const result = await db.collection("contacts").insertOne(newEntry);
 
       return { _id: result.insertedId, ...newEntry };

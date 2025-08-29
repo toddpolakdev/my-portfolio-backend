@@ -1,9 +1,14 @@
 import { gql } from "apollo-server-micro";
 
 export const typeDefs = gql`
+  type SkillTag {
+    name: String!
+    url: String!
+  }
+
   type SkillCategory {
     category: String!
-    tags: [String!]!
+    tags: [SkillTag!]!
   }
 
   type JobEntry {
