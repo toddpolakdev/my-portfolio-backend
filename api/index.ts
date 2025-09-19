@@ -1,15 +1,17 @@
 import { ApolloServer } from "apollo-server-micro";
-import { typeDefs } from "./graphql/schema";
-import { resolvers } from "./graphql/resolvers";
-import { connectToDatabase } from "../mongo";
+import { connectDB } from "./config/db";
 import { IncomingMessage, ServerResponse } from "http";
+import { portfolioTypeDefs } from "./graphql/typeDefs/portfolioTypeDefs";
+import { portfolioResolvers } from "./graphql/resolvers/portfolioResolvers";
+import { flipbookTypeDefs } from "./graphql/typeDefs/flipbookTypeDefs";
+import { flipbookResolvers } from "./graphql/resolvers/flipbookResolvers";
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  typeDefs: [portfolioTypeDefs, flipbookTypeDefs],
+  resolvers: [portfolioResolvers, flipbookResolvers],
   context: async () => {
-    const db = await connectToDatabase();
-    return { db };
+    await connectDB();
+    return {};
   },
   introspection: true,
 });
@@ -28,14 +30,21 @@ export default async function handler(
 ) {
   await startServer;
 
-  const allowedOrigin = process.env.ALLOWED_ORIGIN;
+  // const allowedOrigin = process.env.ALLOWED_ORIGIN;
+  const allowedOrigins = process.env.ALLOWED_ORIGIN?.split(",") || [];
 
-  if (!allowedOrigin) {
+  if (!allowedOrigins) {
     throw new Error("ALLOWED_ORIGIN environment variable is not set.");
   }
 
+  const requestOrigin = req.headers.origin;
+
+  if (requestOrigin && allowedOrigins.includes(requestOrigin)) {
+    res.setHeader("Access-Control-Allow-Origin", requestOrigin);
+  }
+
   res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
+  // res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 

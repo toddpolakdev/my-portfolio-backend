@@ -1,6 +1,6 @@
 import { gql } from "apollo-server-micro";
 
-export const typeDefs = gql`
+export const portfolioTypeDefs = gql`
   type SkillTag {
     name: String!
     url: String!
