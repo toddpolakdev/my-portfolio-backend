@@ -77,6 +77,7 @@ export const flipbookTypeDefs = gql`
   type Query {
     flipBooks: [FlipBook!]!
     flipBookBySlug(slug: String!): FlipBook
+    myFlipbooks: [FlipBook!]!
   }
 
   type Mutation {

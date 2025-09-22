@@ -8,9 +8,24 @@ export const flipbookResolvers = {
     flipBookBySlug: async (_: any, { slug }: { slug: string }) => {
       return await FlipBook.findOne({ slug });
     },
+    myFlipbooks: async (
+      _: any,
+      __: any,
+      context: { userEmail: string | null }
+    ) => {
+      if (!context.userEmail) {
+        throw new Error("Not authenticated");
+      }
+
+      return FlipBook.find({ userEmail: context.userEmail });
+    },
   },
   Mutation: {
-    createFlipBook: async (_: any, { input }: any) => {
+    createFlipBook: async (
+      _: any,
+      { input }: any,
+      context: { userEmail: string | null }
+    ) => {
       const maxOrder = await FlipBook.findOne()
         .sort({ order: -1 })
         .select("order");
@@ -19,9 +34,11 @@ export const flipbookResolvers = {
       const doc = await FlipBook.create({
         ...input,
         order,
+        userEmail: context.userEmail || null,
       });
       return String(doc._id);
     },
+
     updateFlipBook: async (_: any, { id, input }: any) => {
       const res = await FlipBook.findByIdAndUpdate(id, input, { new: true });
       return !!res;

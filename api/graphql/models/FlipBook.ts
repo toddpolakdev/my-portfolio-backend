@@ -38,6 +38,10 @@ const FlipBookSchema = new Schema(
     order: { type: Number, default: 0 },
     settings: { type: FlipBookSettingsSchema, default: () => ({}) },
     publishedAt: Date,
+    userEmail: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );

@@ -9,9 +9,13 @@ import { flipbookResolvers } from "./graphql/resolvers/flipbookResolvers";
 const server = new ApolloServer({
   typeDefs: [portfolioTypeDefs, flipbookTypeDefs],
   resolvers: [portfolioResolvers, flipbookResolvers],
-  context: async () => {
+  context: async ({ req }) => {
     await connectDB();
-    return {};
+
+    const userEmail = (req.headers["x-user-email"] as string) || null;
+    console.log("Context userEmail:", userEmail);
+
+    return { userEmail };
   },
   introspection: true,
 });
@@ -30,13 +34,7 @@ export default async function handler(
 ) {
   await startServer;
 
-  // const allowedOrigin = process.env.ALLOWED_ORIGIN;
   const allowedOrigins = process.env.ALLOWED_ORIGIN?.split(",") || [];
-
-  if (!allowedOrigins) {
-    throw new Error("ALLOWED_ORIGIN environment variable is not set.");
-  }
-
   const requestOrigin = req.headers.origin;
 
   if (requestOrigin && allowedOrigins.includes(requestOrigin)) {
@@ -44,9 +42,11 @@ export default async function handler(
   }
 
   res.setHeader("Access-Control-Allow-Credentials", "true");
-  // res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, x-user-email"
+  );
 
   if (req.method === "OPTIONS") {
     res.statusCode = 200;
