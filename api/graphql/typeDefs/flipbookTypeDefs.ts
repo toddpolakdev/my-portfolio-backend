@@ -14,6 +14,7 @@ export const flipbookTypeDefs = gql`
     publishedAt: String
     createdAt: String
     updatedAt: String
+    userEmail: String
   }
 
   type FlipBookSettings {
