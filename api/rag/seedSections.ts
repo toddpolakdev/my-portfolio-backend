@@ -6,7 +6,7 @@ import { embedText } from "./embeddings.js";
 import type { RagChunk } from "./types.js";
 
 const DB_URI = process.env.MONGODB_URI!;
-const DB_NAME = process.env.DB_NAME || "portfolio";
+const DB_NAME = process.env.DB_NAME || "portfolio_dev";
 const CHUNKS_COLLECTION = process.env.CHUNKS_COLLECTION || "rag_chunks";
 
 async function main() {
