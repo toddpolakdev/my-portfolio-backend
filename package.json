@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev dev.ts",
+    "dev": "ts-node-dev --respawn --transpile-only api/index.ts",
     "build": "tsc"
   },
   "keywords": [],
@@ -13,6 +13,7 @@
   "dependencies": {
     "@vercel/node": "^2.3.0",
     "apollo-server-micro": "^3.13.0",
+    "cloudinary": "^2.10.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",

@@ -84,6 +84,8 @@ export const flipbookTypeDefs = gql`
   type Mutation {
     createFlipBook(input: FlipBookInput!): ID!
     updateFlipBook(id: ID!, input: FlipBookInput!): Boolean!
+    deleteFlipBook(id: ID!): Boolean!
+    deleteImage(publicId: String!): Boolean!
     reorderFlipBooks(ids: [ID!]!): Boolean!
   }
 `;

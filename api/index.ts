@@ -30,7 +30,7 @@ export const config = {
 
 export default async function handler(
   req: IncomingMessage,
-  res: ServerResponse
+  res: ServerResponse,
 ) {
   await startServer;
 
@@ -45,7 +45,7 @@ export default async function handler(
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, x-user-email"
+    "Content-Type, Authorization, x-user-email",
   );
 
   if (req.method === "OPTIONS") {
@@ -55,4 +55,26 @@ export default async function handler(
   }
 
   return server.createHandler({ path: "/api/graphql" })(req, res);
+}
+
+// 👇 ONLY run locally, NOT on Vercel
+if (process.env.NODE_ENV !== "production") {
+  const http = require("http");
+
+  const PORT = 4000;
+
+  http
+    .createServer((req: IncomingMessage, res: ServerResponse) => {
+      if (req.url?.startsWith("/api/graphql")) {
+        return handler(req, res);
+      }
+
+      res.statusCode = 404;
+      res.end("Not Found");
+    })
+    .listen(PORT, () => {
+      console.log(
+        `🚀 Local server running at http://localhost:${PORT}/api/graphql`,
+      );
+    });
 }
