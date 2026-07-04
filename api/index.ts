@@ -5,10 +5,12 @@ import { portfolioTypeDefs } from "./graphql/typeDefs/portfolioTypeDefs";
 import { portfolioResolvers } from "./graphql/resolvers/portfolioResolvers";
 import { flipbookTypeDefs } from "./graphql/typeDefs/flipbookTypeDefs";
 import { flipbookResolvers } from "./graphql/resolvers/flipbookResolvers";
+import { favoritesTypeDefs } from "./graphql/typeDefs/favoritesTypeDefs";
+import { favoritesResolvers } from "./graphql/resolvers/favoritesResolvers";
 
 const server = new ApolloServer({
-  typeDefs: [portfolioTypeDefs, flipbookTypeDefs],
-  resolvers: [portfolioResolvers, flipbookResolvers],
+  typeDefs: [portfolioTypeDefs, flipbookTypeDefs, favoritesTypeDefs],
+  resolvers: [portfolioResolvers, flipbookResolvers, favoritesResolvers],
   context: async ({ req }) => {
     await connectDB();
 
